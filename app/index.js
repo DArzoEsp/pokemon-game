@@ -73,15 +73,12 @@ function animate() {
     } else if(keys.a.pressed) {
         background.position.y += 10;
         background.image.src = '../img/playerLeft.png'
-
     } else if(keys.s.pressed) {
         background.position.x -= 10;
         background.image.src = '../img/playerDown.png'
-        
     } else if(keys.d.pressed) {
         background.position.y -= 10;
         background.image.src = '../img/playerRight.png'
-
     }
 }
 
