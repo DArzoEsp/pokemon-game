@@ -1,6 +1,8 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');                      // c is short for context and this is what we will use to reference for our game
 const collisionArray = [];
+const battlePatchArray = [];
+const foregroundObjectArray = [];
 
 canvas.width = 1024;
 canvas.height = 576;                                    // ideal size for tv and desktop
@@ -12,7 +14,12 @@ const offset = {
 
 for (let i = 0; i < collisions.length; i += 70) {
     collisionArray.push(collisions.slice(i, i + 70));
+    battlePatchArray.push(battlePatch.slice(i, i + 70));
+    foregroundObjectArray.push(foregroundObject.slice(i, i + 70));
 }
+
+console.log(battlePatchArray)
+console.log(foregroundObjectArray)
 class Boundary {
     static width = 48;
     static height = 48;
@@ -23,8 +30,28 @@ class Boundary {
     }
 
     draw() {
-        c.fillStyle = 'red';
+        c.fillStyle = 'rgba(255, 0, 0, 0)';
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    }
+}
+
+class BattlePatch {
+    static width = 48;
+    static height = 48;
+    constructor({position}) {
+        this.position = position;
+        this.width = 48;
+        this.height = 48;
+    }
+}
+
+class ForegroundObject {
+    static width = 48;
+    static height = 48;
+    constructor({position}) {
+        this.position = position;
+        this.width = 48;
+        this.height = 48;
     }
 }
 
@@ -59,7 +86,7 @@ class Sprite {                                  // created new sprite in order t
         this.frames = frames;
         this.image.onload = () => {                             // only want to set width and height when image is loaded
             this.width = this.image.width / this.frames.max
-            this.height = this.image.height / this.frames.max
+            this.height = this.image.height
         }
 
     }
@@ -74,10 +101,22 @@ class Sprite {                                  // created new sprite in order t
         this.position.x,
         this.position.y,
         this.image.width / this.frames.max,            // declare what width the image should be render at
-        this.image.height                              // declare what height the image should be rendered at  --- ACTUAL COORDINATES
+        this.image.height                             // declare what height the image should be rendered at  --- ACTUAL COORDINATES
         );
     }
 }
+
+const player = new Sprite(                                          // creates player object with respective properties assigned as needed
+    {
+        position: {
+            x: (canvas.width / 2 - (playerImage.width / 4) / 2),
+            y: (canvas.height / 2 - (playerImage.height / 4) / 2),
+        },
+        image: playerImage,
+        frames: {
+            max: 4                                                  // frames are 4 because the image is 4 frames
+        }
+});
 
 const background = new Sprite(                  // created background sprite in order to render new instance of Sprite class
     {
@@ -90,19 +129,6 @@ const background = new Sprite(                  // created background sprite in 
             max: 1
         }
 });
-
-const player = new Sprite(                                          // creates player object with respective properties assigned as needed
-    {
-        position: {
-            x: (canvas.width / 2 - (playerImage.width / 4) / 2),
-            y: (canvas.height / 2 - playerImage.height / 2),
-        },
-        image: playerImage,
-        frames: {
-            max: 4                                                  // frames are 4 because the image is 4 frames
-        }
-});
-
 
 const keys = {                                                      // keys object used for movement which is w a s d 
     w: {                            
@@ -121,50 +147,134 @@ const keys = {                                                      // keys obje
 
 const movables = [background, ...boundaries];              // moved all moving images into an array for better management and ease of reading
 
-function checkCollision() {
-    boundaries.forEach(item => {        
-        if(player.position.x + player.width >= item.position.x
-        && player.position.y + player.height >= item.position.y
-        && player.position.x + player.width <= item.position.x + item.width
-        && player.position.y + player.height <= item.position.y + item.height
-        ){
-            console.log('hit')
-        }
-    })
+function checkCollision({rect1, rect2}) {
+    return (
+        rect1.position.x + rect1.width >= rect2.position.x
+        && rect1.position.y + rect1.height >= rect2.position.y
+        && rect1.position.x <= rect2.position.x + rect2.width
+        && rect1.position.y <= rect2.position.y + rect2.height
+    )     
 }
 
 function animate() {
     window.requestAnimationFrame(animate);
-    background.draw()                                   // used to wait until the image loads to draw image
-    player.draw()
+    background.draw();                                   // used to wait until the image loads to draw image
+    player.draw();
     
     boundaries.forEach(boundary => {
         boundary.draw();
     })
-    
-    checkCollision();
+
+    let motion = true;
 
     if(keys.w.pressed && lastKey === 'w') {             // lastkey is used as a truth or false for AND logic
+        for(let i = 0; i <boundaries.length; i++) {
+            const boundary = boundaries[i];
+            if(checkCollision(
+                    {   
+                        rect1: player,
+                        rect2: {
+                            ...boundary, 
+                            position: {
+                                x: boundary.position.x,
+                                y: boundary.position.y + 3
+                            }
+                        }
+                    }
+                )
+            ){
+                motion = false;
+                break;
+            }
+        }
         movables.forEach(item => {
-            item.position.y += 3;                    // displays every boundary and as you move it stays put as well
+            if(motion) { 
+                item.position.y += 3;                    // displays every boundary and as you move it stays put as well
+            }
         })
         playerImage.src = '../img/playerUp.png'         // changes the direction the player object is facing respective to the key pressed
     } else if(keys.a.pressed && lastKey === 'a') {
+        for(let i = 0; i <boundaries.length; i++) {
+            const boundary = boundaries[i];
+            if(checkCollision(
+                    {   
+                        rect1: player,
+                        rect2: {
+                            ...boundary, 
+                            position: {
+                                x: boundary.position.x + 3,
+                                y: boundary.position.y
+                            }
+                        }
+                    }
+                )
+            ){
+                motion = false;
+                break;
+            }
+        }
         movables.forEach(item => {
-            item.position.x += 3;
+            if(motion) { 
+                item.position.x += 3;
+            }
         })
         playerImage.src = '../img/playerLeft.png'
     } else if(keys.s.pressed && lastKey === 's') {
+        for(let i = 0; i <boundaries.length; i++) {
+            const boundary = boundaries[i];
+            if(checkCollision(
+                    {   
+                        rect1: player,
+                        rect2: {
+                            ...boundary, 
+                            position: {
+                                x: boundary.position.x,
+                                y: boundary.position.y - 3
+                            }
+                        }
+                    }
+                )
+            ){
+                motion = false;
+                break;
+            }
+        }
         movables.forEach(item => {
-            item.position.y -= 3;
+            if(motion) { 
+                item.position.y -= 3;
+            }
         })
         playerImage.src = '../img/playerDown.png';
     } else if(keys.d.pressed && lastKey === 'd') {
+        for(let i = 0; i <boundaries.length; i++) {
+            const boundary = boundaries[i];
+            if(checkCollision(
+                    {   
+                        rect1: player,
+                        rect2: {
+                            ...boundary, 
+                            position: {
+                                x: boundary.position.x - 3,
+                                y: boundary.position.y
+                            }
+                        }
+                    }
+                )
+            ){
+                motion = false;
+                break;
+            }
+        }
+
         movables.forEach(item => {
-            item.position.x -= 3;
+            if(motion) { 
+                item.position.x -= 3;
+            }
         })
         playerImage.src = '../img/playerRight.png'
     }
+
+    motion = true;
 }
 
 animate();                                          // calls function animate
