@@ -46,7 +46,8 @@ const player = new Sprite(                                          // creates p
         },
         image: playerImage,
         frames: {
-            max: 4                                                  // frames are 4 because the image is 4 frames
+            max: 4,                                                  // frames are 4 because the image is 4 frames
+            val: 0
         }
 });
 
@@ -58,7 +59,8 @@ const background = new Sprite(                  // created background sprite in 
         },
         image: image,
         frames: {
-            max: 1
+            max: 1,
+            val: 0
         }
 });
 
@@ -70,7 +72,8 @@ const foreground = new Sprite(                  // created background sprite in 
         },
         image: foregroundImage,
         frames: {
-            max: 1
+            max: 1,
+            val: 0
         }
 });
 
@@ -138,6 +141,15 @@ function animate() {
             }
         })
         playerImage.src = '../img/playerUp.png'         // changes the direction the player object is facing respective to the key pressed
+
+        for(let i = 0; i < 100; i++) {
+            if(player.xCrop >= 192) {
+                player.xCrop += 48
+            } else {
+                player.xCrop = 0;
+            }
+        }
+
     } else if(keys.a.pressed && lastKey === 'a') {
         for(let i = 0; i <boundaries.length; i++) {
             const boundary = boundaries[i];
@@ -163,6 +175,7 @@ function animate() {
                 item.position.x += 3;
             }
         })
+        //for(let i)
         playerImage.src = '../img/playerLeft.png'
     } else if(keys.s.pressed && lastKey === 's') {
         for(let i = 0; i <boundaries.length; i++) {
