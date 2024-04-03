@@ -8,12 +8,13 @@ class Sprite {                                  // created new sprite in order t
             this.width = this.image.width / this.frames.max
             this.height = this.image.height
         }
+        this.moving = false;
     }
 
     draw() {
         c.drawImage(                                   // becomes object
         this.image,
-        this.frames.val,                                             // x-axis where you want to start to crop image
+        this.frames.val * this.width,                                             // x-axis where you want to start to crop image
         0,                                             // y-axis where you want to start to crop image
         this.image.width / this.frames.max,            // what portion of width do you want to leave so 1/4 cuz 4 images
         this.image.height,                             // height of image crop  --- ONLY CROPPING
@@ -23,19 +24,20 @@ class Sprite {                                  // created new sprite in order t
         this.image.height                               // declare what height the image should be rendered at  --- ACTUAL COORDINATES
         );
 
+        if(!this.moving) return
+
         if(this.frames.max > 1) {
             this.frames.elapsed++;
         }
 
         if(this.frames.elapsed % 20 === 0) {
             if(this.frames.val < this.frames.max - 1) {
-                this.frames.val += 48;
+                this.frames.val++;
             } else {
                 this.frames.val = 0;
             }
         }
-        
-    }
+}
 
     
 }
@@ -52,15 +54,5 @@ class Boundary {
     draw() {
         c.fillStyle = 'rgba(255, 0, 0, 0)';
         c.fillRect(this.position.x, this.position.y, this.width, this.height);
-    }
-}
-
-class BattlePatch {
-    static width = 48;
-    static height = 48;
-    constructor({position}) {
-        this.position = position;
-        this.width = 48;
-        this.height = 48;
     }
 }
