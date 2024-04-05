@@ -54,3 +54,5 @@ version 3.9.1
 - made battleBackground sprite in order to animate
 - changed ratio from 1024px by 576px to 1440px by 810px
 - created animateBattle sequence
+- cleaned up a lot of messy code and as well as organized as to help the event loop for smoother loading
+- added lots of comments in order to help understand whats happening

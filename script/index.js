@@ -1,10 +1,17 @@
+// canvas element is selected and going to be used as context for game
 const canvas = document.querySelector('canvas');
-const c = canvas.getContext('2d');                      // c is short for context and this is what we will use to reference for our game
+// c is short for context and this is what we will use to reference for our game
+const c = canvas.getContext('2d');
+// this array will hold the boundaries the player will not be able to move thru                      
 const collisionArrays = [];
+// these are the battle zone arrays used to detect battle sequences
 const battlePatchArrays = [];
+// this array will be used for a checkCollision function
 const boundaries = [];
+// this array will be used for a checkCollision function but as well as used for battle activation once colliding
 const battlePatches = [];
 
+// setting canvas width and height
 canvas.width = 1440;
 canvas.height = 810;                                    
 
@@ -45,6 +52,7 @@ drakeImage.src = '../img/drakeSprite.png'
 const beezleBlazeImage = new Image();
 beezleBlazeImage.src = '../img/beezleBlazeSprite.png'
 
+// map background offset because the area is 3360 by 1960
 const offset = {
     x: -600,
     y: -480
@@ -56,12 +64,13 @@ const offset = {
 // frames object with properties of max and val 
 
 // sprite for background
-const background = new Sprite(          
-    {
+const background = new Sprite({
+        //position
         position: {
             x: offset.x,
             y: offset.y
         },
+        // frames
         image: backgroundImage,
         frames: {
             max: 1
@@ -83,14 +92,11 @@ const foreground = new Sprite(
 
 // sprite for battle background image
 const battleBackground = new Sprite( {
-    //position
     position: {
         x: 0,
         y: 0
     },
-    // image
     image: battleImage,
-    // frames
     frames: {
         max: 1
     }
@@ -238,11 +244,6 @@ battlePatchArrays.forEach((row, i) =>{
     })
 });
 
-// battle object to initiate (activate) battle
-const battle =  {
-    initiated: false
-}
-
 // array of sprites that move sprites and for easier reading *** not for battle background ***
 const movables = [background, foreground, ...boundaries, ...battlePatches];
 
@@ -253,8 +254,6 @@ player.frames.val = 1;
 gsap.to('.battle-container', {
     opacity: 0
 });
-
-window.addEventListener('DOMContentLoaded', () => {
 
 // calls function animate
 animate();  
@@ -287,8 +286,6 @@ function animate() {
     // boolean to stop movement animation
     player.animate = false;
 
-    if(battle.initiated) return;
-
     if(keys.w.pressed
     || keys.a.pressed
     || keys.s.pressed
@@ -314,7 +311,6 @@ function animate() {
             && (Math.random() < 0.01) ) {
                 // deactivate current animation loop
                 window.cancelAnimationFrame(animationId);
-                battle.initiated = true;
                 // flashing sequence transition
                 gsap.to('.battle-container', {
                     // make the black container visible
@@ -505,4 +501,3 @@ function checkCollision({rect1, rect2}) {
         && rect1.position.y <= rect2.position.y + rect2.height
     )     
 }
-})
