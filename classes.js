@@ -1,15 +1,15 @@
 class Sprite {                                  // created new sprite in order to make code cleaner
-    constructor({position, image, frames = {max: 1}, sprites}) {  // this will help in creating and helping the animation in order to loop and move camera and player
+    constructor({position, image, frames = {max: 1}, sprites, animate = false}) {  // this will help in creating and helping the animation in order to loop and move camera and player
         this.position = position;
         this.image = image;
         this.frames = {...frames, val: 0, elapsed: 0};
 
         this.image.onload = () => {                             // only want to set width and height when image is loaded
-            this.width = this.image.width / this.frames.max
-            this.height = this.image.height
+            this.width = this.image.width / this.frames.max;
+            this.height = this.image.height;
         }
-        this.moving = false;
-        this.sprites = sprites
+        this.animate = animate;
+        this.sprites = sprites;
     }
 
     draw() {
@@ -25,26 +25,17 @@ class Sprite {                                  // created new sprite in order t
         this.image.height                               // declare what height the image should be rendered at  --- ACTUAL COORDINATES
         );
 
-        if(!this.moving) return
+        if(!this.animate) return
 
         if(this.frames.max > 1) {
             this.frames.elapsed++;
         }
 
-        if(this.frames.elapsed % 20 === 0) {
+        if(this.frames.elapsed % 30 === 0) {
             if(this.frames.val < this.frames.max - 1) {
                 this.frames.val++;
             } else {
                 this.frames.val = 0;
-            }
-        }
-        if(this.running) {
-            if(this.frames.elapsed % 20 === 0) {
-                if(this.frames.val < this.frames.max - 1) {
-                    this.frames.val++;
-                } else {
-                    this.frames.val = 0;
-                }
             }
         }
     }
