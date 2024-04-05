@@ -17,9 +17,21 @@ backgroundImage.src = '../img/Pokemon_map.png'
 const foregroundImage = new Image()
 foregroundImage.src = '../img/foregroundObject.png'
 
-// player image 
-const playerImage = new Image();
-playerImage.src = '../img/playerRight.png';
+// player right image 
+const playerImageRight = new Image();
+playerImageRight.src = '../img/playerRight.png';
+
+// player left image 
+const playerImageLeft = new Image();
+playerImageLeft.src = '../img/playerLeft.png';
+
+// player down image 
+const playerImageDown = new Image();
+playerImageDown.src = '../img/playerDown.png';
+
+// player up image 
+const playerImageUp = new Image();
+playerImageUp.src = '../img/playerUp.png';
 
 // when battle is activated
 const battleImage = new Image()
@@ -52,24 +64,7 @@ const background = new Sprite(
         },
         image: backgroundImage,
         frames: {
-            max: 1,
-            val: 0
-        }
-});
-
-// sprite for player
-const player = new Sprite(                                       
-    {
-        position: {
-            // centers the player image relative to the canvas size
-            x: (canvas.width / 1.6 - playerImage.width),
-            y: (canvas.height / 2 - playerImage.height)
-        },
-        image: playerImage,
-        frames: {
-            // max is 4 because of walking animation
-            max: 4,
-            val: 0
+            max: 1
         }
 });
 
@@ -82,8 +77,7 @@ const foreground = new Sprite(
         },
         image: foregroundImage,
         frames: {
-            max: 1,
-            val: 0
+            max: 1
         }
 });
 
@@ -98,11 +92,26 @@ const battleBackground = new Sprite( {
     image: battleImage,
     // frames
     frames: {
-        max: 1,
-        val: 0
+        max: 1
     }
 });
 
+// sprite for player
+const player = new Sprite(                                       
+    {
+        position: {
+            x: 730,
+            y: 350
+        },
+        image: playerImageRight,
+        frames: {
+            // max is 4 because of walking animation
+            max: 4,
+            hold: 20
+        }
+});
+
+// enemy sprite
 const drake = new Sprite({
     position: {
         x: 1130,
@@ -111,11 +120,12 @@ const drake = new Sprite({
     image: drakeImage,
     frames: {
         max: 4,
-        val: 0
+        hold: 40
     },
     animate: true
 });
 
+// ally sprite
 const beezleBlaze = new Sprite({
     position: {
         x: 420,
@@ -124,7 +134,7 @@ const beezleBlaze = new Sprite({
     image: beezleBlazeImage,
     frames: {
         max: 4,
-        val: 0
+        hold: 40
     },
     animate: true
 }); 
@@ -147,15 +157,17 @@ const keys = {
     }
 }
 
-window.addEventListener('keydown', (e) => {         // listens for w a s d keys to be pressed
+// event listener for movement keys and last key pressed
+window.addEventListener('keydown', (e) => {         
     switch(e.key) {
         case 'w':
+            // whether or not you use movement animation
             keys.w.pressed = true;          
             lastKey = 'w';
             break;
         case 'a':
             keys.a.pressed = true;                
-            lastKey = 'a';                              // lastKey is used for movement in order to keep one way in case you press more than one
+            lastKey = 'a';                          
             break;
         case 's':
             keys.s.pressed = true;
@@ -168,11 +180,13 @@ window.addEventListener('keydown', (e) => {         // listens for w a s d keys 
     }
 });
 
-window.addEventListener('keyup', (e) => {               // changes key property 
+window.addEventListener('keyup', (e) => {               
 switch(e.key) {
         case 'w':
             keys.w.pressed = false;
+            // animate boolean
             player.animate = false;
+            // when not pressing stop player animation to first frame
             player.frames.val = 0;            
             break;
         case 'a':
@@ -240,6 +254,8 @@ gsap.to('.battle-container', {
     opacity: 0
 });
 
+window.addEventListener('DOMContentLoaded', () => {
+
 // calls function animate
 animate();  
 
@@ -250,9 +266,14 @@ function animate() {
     // test ending frame with console.log(animationId)
     const animationId = window.requestAnimationFrame(animate);
 
-
     // draw method for sprite class
     background.draw();
+
+    // draws player
+    player.draw();
+    
+    // draws foreground
+    foreground.draw();
 
     // draws each Boundary class object
     boundaries.forEach(boundary => {
@@ -263,12 +284,6 @@ function animate() {
         battlePatch.draw();
     }) 
 
-    // draws player
-    player.draw();
-    
-    // draws foreground
-    foreground.draw();
-    
     // boolean to stop movement animation
     player.animate = false;
 
@@ -332,7 +347,7 @@ function animate() {
     // checking whether movement keys are pressed and when pressed move
     if(keys.w.pressed && lastKey === 'w') {             
         // changes the direction the player object is facing respective to the key pressed moved to front for priority
-        player.image.src = '/img/playerUp.png'
+        player.image = playerImageUp
 
         // this changes boolean which allows the image to make it seem like walking
         player.animate = true;
@@ -374,7 +389,7 @@ function animate() {
         })
 
     } else if(keys.a.pressed && lastKey === 'a') {
-        player.image.src = '/img/playerLeft.png'
+        player.image = playerImageLeft
         player.animate = true;
 
         for(let i = 0; i < boundaries.length; i++) {
@@ -405,7 +420,7 @@ function animate() {
         })
 
     } else if(keys.s.pressed && lastKey === 's') {
-        player.image.src = '/img/playerDown.png';
+        player.image = playerImageDown;
         player.animate = true;
 
         for(let i = 0; i < boundaries.length; i++) {
@@ -436,7 +451,7 @@ function animate() {
         })
 
     } else if(keys.d.pressed && lastKey === 'd') {
-        player.image.src = '/img/playerRight.png'
+        player.image = playerImageRight
         player.animate = true;
 
         for(let i = 0; i < boundaries.length; i++) {
@@ -490,3 +505,4 @@ function checkCollision({rect1, rect2}) {
         && rect1.position.y <= rect2.position.y + rect2.height
     )     
 }
+})
