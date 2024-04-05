@@ -1,5 +1,5 @@
 class Sprite {                                  // created new sprite in order to make code cleaner
-    constructor({position,image, frames = {max: 1}}) {  // this will help in creating and helping the animation in order to loop and move camera and player
+    constructor({position, image, frames = {max: 1}, sprites}) {  // this will help in creating and helping the animation in order to loop and move camera and player
         this.position = position;
         this.image = image;
         this.frames = {...frames, val: 0, elapsed: 0};
@@ -9,6 +9,7 @@ class Sprite {                                  // created new sprite in order t
             this.height = this.image.height
         }
         this.moving = false;
+        this.sprites = sprites
     }
 
     draw() {
