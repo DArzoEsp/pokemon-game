@@ -51,4 +51,6 @@ version 3.9.1
 (https://cdnjs.com/libraries/gsap/3.9.1)
 
 4/5/2024 4:00pm to 7:00pm
--
+- made battleBackground sprite in order to animate
+- changed ratio from 1024px by 576px to 1440px by 810px
+- created animateBattle sequence
