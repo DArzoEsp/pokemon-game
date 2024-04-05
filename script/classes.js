@@ -10,6 +10,7 @@ class Sprite {                                  // created new sprite in order t
         }
         this.animate = animate;
         this.sprites = sprites;
+        this.running = false;
     }
 
     draw() {

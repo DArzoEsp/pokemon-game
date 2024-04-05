@@ -113,7 +113,7 @@ const player = new Sprite(
         frames: {
             // max is 4 because of walking animation
             max: 4,
-            hold: 20
+            hold: 25
         }
 });
 
@@ -163,6 +163,8 @@ const keys = {
     }
 }
 
+let toggled = true;
+
 // event listener for movement keys and last key pressed
 window.addEventListener('keydown', (e) => {         
     switch(e.key) {
@@ -182,6 +184,18 @@ window.addEventListener('keydown', (e) => {
         case 'd':
             keys.d.pressed = true;
             lastKey = 'd';
+            break;
+        // used to toggle running animation
+        case 'Shift':
+            if(toggled) {
+                player.running = true;
+                player.frames.hold = 15;
+                toggled = false;
+            } else {
+                player.running = false;
+                player.frames.hold = 25;
+                toggled = true;
+            }
             break;
     }
 });
@@ -377,11 +391,13 @@ function animate() {
 
         // this loop animates all moveables (background, foreground, ...boundaries, ...battlePatches)
         movables.forEach(item => {
+            if(player.running  && player.animate) {
+                item.position.y += 3.3;
             // only moves if moving boolean is true
-            if(player.animate) {
+            } else if(player.animate) {
                 // the rate at which all things move in any given direction (north, east, south, west)
                 item.position.y += 2;
-            }
+            } 
         })
 
     } else if(keys.a.pressed && lastKey === 'a') {
@@ -410,9 +426,11 @@ function animate() {
         }
 
         movables.forEach(item => {
-            if(player.animate) {
+            if(player.running && player.animate) {
+                item.position.x +=  3.3;
+            } else if(player.animate) {
                 item.position.x += 2;
-            }
+            } 
         })
 
     } else if(keys.s.pressed && lastKey === 's') {
@@ -441,9 +459,11 @@ function animate() {
         }
 
         movables.forEach(item => {
-            if(player.animate) {
+            if(player.running && player.animate) {
+                item.position.y -= 3.3;
+            } else if(player.animate) {
                 item.position.y -= 2;
-            }
+            }  
         })
 
     } else if(keys.d.pressed && lastKey === 'd') {
@@ -472,7 +492,9 @@ function animate() {
         }
 
         movables.forEach(item => {
-            if(player.animate) {
+            if(player.running && player.animate) {
+                item.position.x -= 3.3;
+            } else if(player.animate) {
                 item.position.x -= 2;
             }
         })

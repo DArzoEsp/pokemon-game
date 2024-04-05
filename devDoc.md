@@ -50,9 +50,12 @@ version 3.9.1
     </script>
 (https://cdnjs.com/libraries/gsap/3.9.1)
 
-4/5/2024 4:00pm to 7:00pm
+4/4/2024 4:00pm to 7:00pm
 - made battleBackground sprite in order to animate
 - changed ratio from 1024px by 576px to 1440px by 810px
 - created animateBattle sequence
+
+4/5/2024 4:00pm to 7:00pm
+- added running animation feature
 - cleaned up a lot of messy code and as well as organized as to help the event loop for smoother loading
 - added lots of comments in order to help understand whats happening
