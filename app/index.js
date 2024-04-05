@@ -3,12 +3,16 @@ const c = canvas.getContext('2d');                      // c is short for contex
 const collisionArray = [];
 const battlePatchArray = [];
 
-canvas.width = 1024;
-canvas.height = 576;                                    // ideal size for tv and desktop
+gsap.to('#battle-container', {
+    opacity: 0
+});
+
+canvas.width = 1440;
+canvas.height = 960;                                    
 
 const offset = {
-    x: -850,
-    y: -560
+    x: -700,
+    y: -420
 }
 
 for (let i = 0; i < collisions.length; i += 70) {
@@ -44,6 +48,9 @@ battlePatchArray.forEach((row, i) =>{
 const image = new Image()
 image.src = '../img/Pokemon_map.png'
 
+const battleImage = new Image()
+battleImage.src = '../img/battleBackground.png'
+
 const foregroundImage = new Image()
 foregroundImage.src = '../img/foregroundObject.png'
 
@@ -53,8 +60,8 @@ playerImage.src = '../img/playerRight.png';
 const player = new Sprite(                                          // creates player object with respective properties assigned as needed
     {
         position: {
-            x: (canvas.width / 2 - (playerImage.width / 2)),
-            y: (canvas.height / 2 - (playerImage.height / 2)),
+            x: (canvas.width / 1.8 - playerImage.width),
+            y: (canvas.height / 2 - playerImage.height),
         },
         image: playerImage,
         frames: {
@@ -104,6 +111,9 @@ const keys = {                                                      // keys obje
     }
 }
 
+const battle =  {
+    initiated: false
+}
 const movables = [background, foreground, ...boundaries, ...battlePatches];                 // moved all moving images into an array for better management and ease of reading
 player.frames.val = 1;                                                                      // for starting position so they wont look like they have their leg up
 
@@ -117,18 +127,22 @@ function checkCollision({rect1, rect2}) {
 }
 
 function animate() {
-    window.requestAnimationFrame(animate);
+    const animationId = window.requestAnimationFrame(animate);
+    // test ending frame with console.log(animationId)
     background.draw();
     boundaries.forEach(boundary => {
         boundary.draw();
     })
     battlePatches.forEach(battlePatch => {
         battlePatch.draw();
-    })                                   // used to wait until the image loads to draw image
-    player.draw();
+    })            
+    player.draw();                       // used to wait until the image loads to draw image
     foreground.draw();
-
+    
     let motion = true;
+    player.moving = false;
+
+    if(battle.initiated) return;
 
     if(keys.w.pressed
     || keys.a.pressed
@@ -140,22 +154,39 @@ function animate() {
             Math.max(player.position.x, battleZone.position.x))
             * (Math.min(player.position.y + player.height, battleZone.position.y + battleZone.height) - 
             Math.max(player.position.y, battleZone.position.y))  // comparing two positions to check which is greater at that moment
-            if(checkCollision(
-            {
-                rect1: player,
-                rect2: battleZone
-            }) &&
-            (overlappingArea > (player.width * player.height) / 2)
-            && Math.random() < 0.01 
-            )
-            {
-                console.log('hello')
+
+            if(checkCollision({ rect1: player, rect2: battleZone})
+            && (overlappingArea > (player.width * player.height) / 2)
+            && (Math.random() < 0.01) ) {
+                // deactivate current animation loop
+                window.cancelAnimationFrame(animationId);
+                battle.initiated = true;
+                // flashing sequence
+                gsap.to('#battle-container', {
+                    opacity: 1,
+                    repeat: 3,
+                    yoyo: true,
+                    duration: 0.3,
+                    onComplete() {
+                        gsap.to('#battle-container', {      
+                            opacity: 1,
+                            duration: 0.3
+                        })
+                    }
+                })
+
+                // new animation loop
+
+                // cancel animation frame
+                window.cancelAnimationFrame(animationId);
             }
         }
     }
 
-    if(keys.w.pressed && lastKey === 'w') {             // lastkey is used as a truth or false for AND logic
-        playerImage.src = '../img/playerUp.png'         // changes the direction the player object is facing respective to the key pressed
+    // lastkey is used as a truth or false for AND logic
+    if(keys.w.pressed && lastKey === 'w') {             
+        // changes the direction the player object is facing respective to the key pressed moved to front for priority
+        playerImage.src = '../img/playerUp.png'
         player.moving = true;
 
         for(let i = 0; i < boundaries.length; i++) {
@@ -172,17 +203,20 @@ function animate() {
                 }
             }))
             {
-            motion = false;
-            break;
+                motion = false;
+                player.moving = false;
+                player.frames.val = 0;
+                break;
             }
             
         }
 
         movables.forEach(item => {
-            if(motion) { 
-                item.position.y += 3;                   // displays every boundary and as you move it stays put as well
+            if(motion) {
+                item.position.y += 2;
             }
         })
+
     } else if(keys.a.pressed && lastKey === 'a') {
         playerImage.src = '../img/playerLeft.png'
         player.moving = true;
@@ -201,20 +235,24 @@ function animate() {
                 }
             }))
             {
-            motion = false;
-            break;
+                motion = false;
+                player.moving = false;
+                player.frames.val = 0;
+                break;
             }
-            
+
         }
 
         movables.forEach(item => {
-            if(motion) { 
-                item.position.x += 3;
+            if(motion) {
+                item.position.x += 2;
             }
         })
+
     } else if(keys.s.pressed && lastKey === 's') {
         playerImage.src = '../img/playerDown.png';
         player.moving = true;
+
         for(let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i];
             if(checkCollision(
@@ -229,28 +267,29 @@ function animate() {
                 }
             }))
             {
-            motion = false;
-            break;
+                motion = false;
+                player.moving = false;
+                player.frames.val = 0;
+                break;
             }
             
         }
 
         movables.forEach(item => {
-            if(motion) { 
-                item.position.y -= 3;
+            if(motion) {
+                item.position.y -= 2;
             }
         })
+
     } else if(keys.d.pressed && lastKey === 'd') {
         playerImage.src = '../img/playerRight.png'
         player.moving = true;
+
         for(let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i];
             if(checkCollision(
             {   
-                rect1: 
-                
-                
-                player,
+                rect1: player,
                 rect2: {
                     ...boundary, 
                     position: {
@@ -260,20 +299,27 @@ function animate() {
                 }
             }))
             {
-            motion = false;
-            break;
+                motion = false;
+                player.moving = false;
+                player.frames.val = 1;
+                break;
             }
-            
+
         }
 
         movables.forEach(item => {
-            if(motion) { 
-                item.position.x -= 3;
+            if(motion) {
+                item.position.x -= 2;
             }
         })
     }
 
     motion = true;
+}
+
+function animateBattle() {
+    window.requestAnimationFrame(animateBattle);
+
 }
 
 animate();                                          // calls function animate
@@ -283,7 +329,7 @@ let lastKey;
 window.addEventListener('keydown', (e) => {         // listens for w a s d keys to be pressed
     switch(e.key) {
         case 'w':
-            keys.w.pressed = true;            
+            keys.w.pressed = true;          
             lastKey = 'w';
             break;
         case 'a':
@@ -299,7 +345,6 @@ window.addEventListener('keydown', (e) => {         // listens for w a s d keys 
             lastKey = 'd';
             break;
     }
-    
 });
 
 window.addEventListener('keyup', (e) => {               // changes key property 
@@ -325,5 +370,4 @@ switch(e.key) {
             player.frames.val = 1;
             break;
     }
-    
 });

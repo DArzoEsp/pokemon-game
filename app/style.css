@@ -1,3 +1,22 @@
 body {
     background-color: black;
 }
+
+.canvas {
+    width: 1080px;
+    height: 610px;
+}
+
+.container {
+    display: inline-block;
+    position: relative;
+}
+
+#battle-container {
+    background-color: rgb(0, 0, 0);
+    position: absolute; 
+    top: 0;
+    right: 0; 
+    bottom: 0;
+    left: 0;
+}
