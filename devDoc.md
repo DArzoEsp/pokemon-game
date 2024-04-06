@@ -59,3 +59,8 @@ version 3.9.1
 - added running animation feature
 - cleaned up a lot of messy code and as well as organized as to help the event loop for smoother loading
 - added lots of comments in order to help understand whats happening
+
+4/6/2024 1:00pm to 6:00pm
+- adding pixel font for movement instructions
+- added movement instruction text box with functionality
+- creating interface with functionality

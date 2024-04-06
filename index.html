@@ -4,12 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
     <title>Pokemon</title>
 </head>
     <body>
         <div class="container">
+            <div class="movement-instructions">
+                Movement:  
+                <div>W - Up</div>
+                <div>A - Left</div>
+                <div>S - Down</div>
+                <div>D - Right</div>
+                <div>Shift - Toggled running</div>
+                <span class="enter-close"> press 'space' to close</span>
+            </div>
             <div class="battle-container"></div>
+            <div class="interface">
+                <div class="interface__details"></div>
+                <div class="interface__player-choice"></div>
+            </div>
             <canvas class="canvas"></canvas>
+            
         </div>
     </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"
@@ -19,6 +36,7 @@
     </script>
     <script src="/script/data/battlePatch.js"></script>
     <script src="/script/data/collisions.js"></script>
+    <script src="/script/util.js" ></script>
     <script src="/script/classes.js" ></script>
     <script defer src="/script/index.js"></script>
 </html>

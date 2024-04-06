@@ -7,6 +7,28 @@ body {
     height: 576px;
 }
 
+.movement-instructions {
+    font-family: Silkscreen;
+    font-size: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    width: 250px;
+    height: 120px;
+    border: 5px outset rgb(76, 195, 47);
+    border-radius: 10px;
+    top: 100px;
+    left: 100px;
+    background-color: white;
+}
+
+.enter-close {
+    margin-top: 5px;
+    font-size: 8px;
+}
+
 .container {
     display: inline-block;
     position: relative;
@@ -19,4 +41,15 @@ body {
     right: 0; 
     bottom: 0;
     left: 0;
+}
+
+.interface {
+    position: absolute;
+    background-color: white;
+    height: 140px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    border-top: 4px solid;
 }

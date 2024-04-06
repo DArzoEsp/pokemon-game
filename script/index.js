@@ -2,6 +2,10 @@
 const canvas = document.querySelector('canvas');
 // c is short for context and this is what we will use to reference for our game
 const c = canvas.getContext('2d');
+
+const textBox = document.querySelector('.movement-instructions');
+const interface = document.querySelector('.interface');
+
 // this array will hold the boundaries the player will not be able to move thru                      
 const collisionArrays = [];
 // these are the battle zone arrays used to detect battle sequences
@@ -198,6 +202,13 @@ window.addEventListener('keydown', (e) => {
             }
             break;
     }
+
+    if(e.keyCode ==  32) {
+        // closes text box
+        gsap.to(textBox, {
+            opacity: 0
+        })
+    }
 });
 
 window.addEventListener('keyup', (e) => {               
@@ -225,6 +236,7 @@ switch(e.key) {
             player.frames.val = 1;
             break;
     }
+
 });
 
 // this loop creates a nested array with a length of 70
@@ -261,11 +273,13 @@ battlePatchArrays.forEach((row, i) =>{
 // array of sprites that move sprites and for easier reading *** not for battle background ***
 const movables = [background, foreground, ...boundaries, ...battlePatches];
 
+const battleContainer = document.querySelector('.battle-container');
+
 // for starting position so they wont look like they have their leg up
 player.frames.val = 1;                                                                      
 
 // for smooth starting transition
-gsap.to('.battle-container', {
+gsap.to(battleContainer, {
     opacity: 0
 });
 
@@ -325,8 +339,13 @@ function animate() {
             && (Math.random() < 0.01) ) {
                 // deactivate current animation loop
                 window.cancelAnimationFrame(animationId);
+                // to make textBox disappear
+                gsap.to(textBox, {
+                    opacity: 0,
+                    duration: 0.5
+                })
                 // flashing sequence transition
-                gsap.to('.battle-container', {
+                gsap.to(battleContainer, {
                     // make the black container visible
                     opacity: 1,
                     // repeat it three times from 0, 1, 0 in terms of opacity
@@ -341,11 +360,10 @@ function animate() {
                         // new animation loop
                         animateBattle();
                         // make battle container invisible with this
-                        gsap.to('.battle-container', {      
+                        gsap.to(battleContainer, {      
                             opacity: 0,
                             duration: 0.5,
                         })
-
                     }
                 })
 
@@ -367,6 +385,7 @@ function animate() {
             // variable is every boundary in the game
             const boundary = boundaries[i];
 
+            // checking two rectangles (player and boundary)
             if(checkCollision(
             {   
                 rect1: player,
@@ -511,15 +530,8 @@ function animateBattle() {
     beezleBlaze.draw();
     // draws drake
     drake.draw();
-}
 
-//check collision function that parameters holds a nested object that are rectangles
-function checkCollision({rect1, rect2}) {
-    // this checks whether or not the boundaries position are about to be equal to the players position
-    return (
-        rect1.position.x + rect1.width >= rect2.position.x
-        && rect1.position.y + rect1.height >= rect2.position.y
-        && rect1.position.x <= rect2.position.x + rect2.width
-        && rect1.position.y <= rect2.position.y + rect2.height
-    )     
+    gsap.to(interface, {
+        opacity: 1
+    })
 }
