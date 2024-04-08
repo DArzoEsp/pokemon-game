@@ -49,6 +49,33 @@ class Sprite {
             }
         }
     }
+
+    attack({attack, recipient}) {
+        const tl = gsap.timeline(attack)
+        const t2 = gsap.timeline(recipient)
+
+        if(attack.name == 'Tackle') {
+            tl.to(this.position, {
+                x: this.position.x - 30,
+                y: this.position.y + 10
+            }).to(this.position, {
+                x: this.position.x + 60,
+                y: this.position.y - 25,
+                onComplete() {
+                    t2.to(recipient.position, {
+                        x: recipient.position.x + 20,
+                        y: recipient.position.y - 5,
+                        yoyo: true,
+                        repeat: 3,
+                        duration: 0.3
+                    })
+                }
+            }).to(this.position, {
+                x: this.position.x,
+                y: this.position.y
+            })
+        }
+    }
 }
 
 class Boundary {

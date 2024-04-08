@@ -6,6 +6,9 @@ const c = canvas.getContext('2d');
 const textBox = document.querySelector('.movement-instructions');
 const interface = document.querySelector('.interface-container');
 const run = document.querySelector('.run');
+const attack1 = document.querySelector('.attack_1');
+const attack2 = document.querySelector('.attack_2');
+
 
 // this array will hold the boundaries the player will not be able to move thru                      
 const collisionArrays = [];
@@ -239,6 +242,28 @@ switch(e.key) {
     }
 
 });
+
+attack1.addEventListener('click', () => {
+    beezleBlaze.attack({
+        attack: {
+            name: 'Tackle',
+            dmg: 10,
+            type: 'Normal'
+        },
+        recipient: drake
+    })
+})
+
+attack2.addEventListener('click', () => {
+    beezleBlaze.attack({
+        attack: {
+            name: 'Blaze',
+            dmg: 15,
+            type: 'Fire'
+        },
+        recipient: drake
+    })
+})
 
 // this loop creates a nested array with a length of 70
 // this will be used to create boundaries for the player and create zones for the battle patches
