@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <title>Pokemon</title>
 </head>
     <body>
@@ -20,13 +20,30 @@
                 <div>Shift - Toggled running</div>
                 <span class="enter-close"> press 'space' to close</span>
             </div>
-            <div class="battle-container"></div>
-            <div class="interface">
-                <div class="interface__details"></div>
-                <div class="interface__player-choice"></div>
+            <div class="battle-container">
+                
+        </div>
+            <div class="interface-container">
+                <div class="health-bars-enemy">
+
+                </div>
+                <div class="health-bars-ally">
+
+                </div>
+                <div class="interface">
+                    <div class="interface__attacks">
+                        <button class="interface__button">Attack1</button>
+                        <button class="interface__button">Attack2</button>
+                        <button class="interface__button">Attack3</button>
+                        <button class="interface__button">Attack4</button>
+                    </div>
+                    <div class="interface__details">
+                        <div>Attack type</div>
+                        <button class="run">Run</button>
+                    </div>
+                </div>
             </div>
             <canvas class="canvas"></canvas>
-            
         </div>
     </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"

@@ -4,7 +4,8 @@ const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
 const textBox = document.querySelector('.movement-instructions');
-const interface = document.querySelector('.interface');
+const interface = document.querySelector('.interface-container');
+const run = document.querySelector('.run');
 
 // this array will hold the boundaries the player will not be able to move thru                      
 const collisionArrays = [];
@@ -523,7 +524,7 @@ function animate() {
 // this is the function of animation of battle
 function animateBattle() {
     // calls on for many frames per second
-    window.requestAnimationFrame(animateBattle);
+    const animationId = window.requestAnimationFrame(animateBattle);
     // draws background every time frame is called
     battleBackground.draw();
     // draws beezleBlaze sprite
@@ -532,6 +533,21 @@ function animateBattle() {
     drake.draw();
 
     gsap.to(interface, {
-        opacity: 1
+        opacity: 1,
+    });
+
+    run.addEventListener('click', () => {
+        
+        gsap.to(interface, {
+            opacity: 0,
+            onComplete() {
+                gsap.to(battleContainer, {
+                    opacity: 0,
+                })
+                animate();
+            }
+        })
+
+        window.cancelAnimationFrame(animationId);
     })
 }
