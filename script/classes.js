@@ -13,11 +13,16 @@ class Sprite {
         }
         this.animate = animate;
         this.running = false;
+        this.opacity = 1;
+        this.health = 100;
     }
 
     draw() {
+        // if you use an object globally then save and restore will change everything between the code so drawImage()
+        canvasContext2D.save();
+        canvasContext2D.globalAlpha = this.opacity;
         // becomes object
-        c.drawImage(                                   
+        canvasContext2D.drawImage(                                   
         this.image,
         // x-axis where you want to start to crop image
         this.frames.val * this.width,     
@@ -34,6 +39,7 @@ class Sprite {
         // declare what height the image should be rendered at  --- ACTUAL COORDINATES
         this.image.height                               
         );
+        canvasContext2D.restore();
 
         if(!this.animate) return
 
@@ -51,28 +57,45 @@ class Sprite {
     }
 
     attack({attack, recipient}) {
-        const tl = gsap.timeline(attack)
-        const t2 = gsap.timeline(recipient)
+        const tl = gsap.timeline()
+        const t2 = gsap.timeline()
 
         if(attack.name == 'Tackle') {
+            // animates going back a bit
             tl.to(this.position, {
                 x: this.position.x - 30,
-                y: this.position.y + 10
+                y: this.position.y + 10, 
+                duration: 0.4
+            // animates launching attack
             }).to(this.position, {
                 x: this.position.x + 60,
                 y: this.position.y - 25,
+                duration: 0.4,
                 onComplete() {
+                    gsap.to('.health-bar-enemy', {
+                        width: (recipient.health - attack.dmg) + '%'
+                    })
+
+                    // enemy gets hit (animated hit)
                     t2.to(recipient.position, {
-                        x: recipient.position.x + 20,
+                        x: recipient.position.x + 10,
                         y: recipient.position.y - 5,
                         yoyo: true,
                         repeat: 3,
-                        duration: 0.3
+                        duration: 0.08
+                        // flashing dmg animation
+                    }).to (recipient, {
+                        opacity: 0,
+                        repeat: 5,
+                        yoyo: true,
+                        duration: 0.08
                     })
                 }
+            // attacker returns to start
             }).to(this.position, {
                 x: this.position.x,
-                y: this.position.y
+                y: this.position.y,
+                duration: 0.4
             })
         }
     }
@@ -88,7 +111,7 @@ class Boundary {
     }
 
     draw() {
-        c.fillStyle = 'rgba(255, 0, 0, 0)';
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
+        canvasContext2D.fillStyle = 'rgba(255, 0, 0, 0)';
+        canvasContext2D.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 }

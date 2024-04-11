@@ -1,10 +1,12 @@
 body {
     background-color: black;
+    margin: 0;
+    padding: 0;
 }
 
 .canvas {
-    width: 1440px;
-    height: 810px;
+    width: 100vw;
+    height: 100vh;
 }
 
 .movement-instructions {
@@ -34,7 +36,7 @@ body {
     position: relative;
 }
 
-.battle-container {
+.black-transition {
     background-color: rgb(0, 0, 0);
     position: absolute; 
     top: 0;
@@ -80,12 +82,17 @@ body {
     background-color: #ccc;
 }
 
-.health-overlay {
-    position: absolute;
-    top: 50%;
-    bottom: 40%;
-    left: 10%;
-    right: 12%;
+.health-bar-enemy {
+    display: block;
+    width: 100%;
+    height: 8px;
+    background-color: rgb(85, 154, 56);
+}
+
+.health-bar-ally {
+    display: block;
+    width: 100%;
+    height: 8px;
     background-color: rgb(85, 154, 56);
 }
 
@@ -138,8 +145,8 @@ body {
 .interface__details {
     position: absolute;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: end;
+    justify-content: end;
     font-size: 16px;
     top: 0;
     bottom: 0;
@@ -148,15 +155,23 @@ body {
     background-color: rgb(218, 217, 217);
 }
 
+.attack_type {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
 .run {
     font-family: "Press Start 2P";
-    position: absolute;
     width: 100px;
-    right: 0;
-    left: 332px;
-    top: 65%;
-    bottom: 0;
+    height: 40px;
     border: none;
+    z-index: 0;
     background-color: rgb(174, 173, 173);
 }
 

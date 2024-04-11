@@ -64,3 +64,13 @@ version 3.9.1
 - adding pixel font for movement instructions
 - added movement instruction text box with functionality
 - creating interface with functionality
+
+4/7/2024 4:00pm to 7:00pm
+- fixed the display to work on all screens bigger than 1440 by 810
+- adding run feature
+- 
+
+4/10/2023 4:00pm to 7:00pm
+- improving readability of program (thinking of scaling it more)
+- improving name variables
+- optimizing program as best as I can

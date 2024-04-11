@@ -20,22 +20,25 @@
                 <div>Shift - Toggled running</div>
                 <span class="enter-close"> press 'space' to close</span>
             </div>
-            <div class="battle-container">
+            <div class="black-transition">
                 
-        </div>
+            </div>
             <div class="interface-container">
                 <div class="health-bars-enemy">
                     <div class="name">Drake</div>
                     <div class="health-container">
-                        <div class="health"></div>
-                        <div class="health-overlay"></div>
+                        <div class="health">
+                            <div class="health-bar-enemy"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="health-bars-ally">
                     <div class="name">Beezle Blaze</div>
                     <div class="health-container">
-                        <div class="health"></div>
-                        <div class="health-overlay"></div>
+                        <div class="health">
+                            <div class="health-bar-ally"></div>
+                    </div>
+                        
                     </div>
                 </div>
                 <div class="interface">
@@ -44,7 +47,7 @@
                         <button class="interface__button attack_2">Attack2</button>
                     </div>
                     <div class="interface__details">
-                        <div>Attack type</div>
+                        <div class="attack_type">Attack type</div>
                         <button class="run">Run</button>
                     </div>
                 </div>
@@ -57,9 +60,9 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer">
     </script>
-    <script src="/script/data/battlePatch.js"></script>
-    <script src="/script/data/collisions.js"></script>
-    <script src="/script/util.js" ></script>
+    <script src="/script/data/batltleZoneData.js"></script>
+    <script src="/script/data/boundaryZoneData.js"></script>
     <script src="/script/classes.js" ></script>
-    <script defer src="/script/index.js"></script>
+    <script src="/script/functions.js" ></script>
+    <script defer src="index.js"></script>
 </html>
